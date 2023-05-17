@@ -25,6 +25,7 @@ export default class VocabularyStore {
       from: action,
       add: action,
       getById: action,
+      updateName: action,
     });
   }
 
@@ -52,6 +53,16 @@ export default class VocabularyStore {
       if (!snapshot.exists()) return;
 
       this.translations = [...snapshot.val()];
+    });
+  }
+
+  updateName(vocabularyId: string, name: string) {
+    this.vocabularies = this.vocabularies.map((vocabulary) => {
+      if (vocabulary.id !== vocabularyId) {
+        return vocabulary;
+      }
+
+      return { ...vocabulary, name };
     });
   }
 }
