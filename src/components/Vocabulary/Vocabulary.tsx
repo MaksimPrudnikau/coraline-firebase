@@ -7,7 +7,7 @@ import { isEmpty } from "lodash";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { firebase, firebaseAuth } from "../Databases/firestore.ts";
 import { User } from "firebase/auth";
-import { Translation } from "./Translation.tsx";
+import { Translations } from "./Translations.tsx";
 import { ref, set } from "firebase/database";
 import { IVocabulary } from "../../Mobx/VocabularyStore.ts";
 
@@ -23,7 +23,6 @@ const _Vocabulary: FC = () => {
   const { vocabularyStore } = useStores();
   const vocabularies = vocabularyStore.vocabularies;
   const vocabulary = vocabularyStore.getById(id as string);
-  const translations = vocabularyStore.translations;
 
   if (isEmpty(vocabularies)) {
     return <div>Loading...</div>;
@@ -47,24 +46,7 @@ const _Vocabulary: FC = () => {
         onChange={onChange}
         onBlurCapture={onBlur}
       />
-      <table>
-        <thead>
-          <tr>
-            <td>№</td>
-            <td>English</td>
-            <td>Japanese</td>
-          </tr>
-        </thead>
-        <tbody>
-          {translations.map((translation, index) => (
-            <Translation
-              key={translation.id}
-              position={index + 1}
-              translation={translation}
-            />
-          ))}
-        </tbody>
-      </table>
+      <Translations />
     </div>
   );
 };

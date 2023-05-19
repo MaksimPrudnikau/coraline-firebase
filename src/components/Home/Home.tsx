@@ -21,16 +21,16 @@ const _Home: FC = () => {
       {vocabularies.map((v) => {
         return (
           <div key={v.id} style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex" }}>
-              <label>Id</label>
+            <div style={{ display: "flex", columnGap: 10 }}>
+              <label>Id:</label>
               <Link to={DYNAMIC_ROUTES.vocabulary(v.id)}>{v.id}</Link>
             </div>
-            <div style={{ display: "flex" }}>
-              <label>Name</label>
+            <div style={{ display: "flex", columnGap: 10 }}>
+              <label>Name:</label>
               <span>{v.name}</span>
             </div>
-            <div style={{ display: "flex" }}>
-              <label>Created</label>
+            <div style={{ display: "flex", columnGap: 10 }}>
+              <label>Created:</label>
               <span>{v.created.toLocaleDateString()}</span>
             </div>
           </div>
