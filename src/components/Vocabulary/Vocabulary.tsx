@@ -46,7 +46,7 @@ const _Vocabulary: FC = () => {
         onChange={onChange}
         onBlurCapture={onBlur}
       />
-      <Translations />
+      <Translations vocabularyId={vocabulary.id} />
     </div>
   );
 };

@@ -3,10 +3,13 @@ import { useStores } from "../../Mobx";
 import { observer } from "mobx-react";
 import { Translation } from "./Translation.tsx";
 
-const _Translations: FC = () => {
+interface IProps {
+  vocabularyId: string;
+}
+
+const _Translations: FC<IProps> = (props) => {
   const { vocabularyStore } = useStores();
   const translations = vocabularyStore.translations;
-
   return (
     <table>
       <thead>
@@ -21,10 +24,14 @@ const _Translations: FC = () => {
           <Translation
             key={translation.id}
             position={index + 1}
+            vocabularyId={props.vocabularyId}
             translation={translation}
           />
         ))}
-        <Translation position={translations.length + 1} />
+        <Translation
+          position={translations.length + 1}
+          vocabularyId={props.vocabularyId}
+        />
       </tbody>
     </table>
   );
