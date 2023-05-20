@@ -8,7 +8,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { firebaseAuth } from "../Databases/firestore.ts";
 import { Translations } from "./Translations.tsx";
 import { IVocabulary } from "../../lib/Mobx/VocabularyStore.ts";
-import { Form, Toast } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import * as VocabularyService from "../../lib/Services/Vocabulary.ts";
 
 const _Vocabulary: FC = () => {
@@ -26,8 +26,6 @@ const _Vocabulary: FC = () => {
   const [vocabularyName, setVocabularyName] = useState(vocabulary?.name || "");
   const [vocabularyHint, setVocabularyHint] = useState(vocabulary?.hint || "");
 
-  const createdDate = new Date(vocabulary?.created || "");
-
   if (isEmpty(vocabularies)) {
     return <div>Loading...</div>;
   }
@@ -41,11 +39,6 @@ const _Vocabulary: FC = () => {
   const onChangeHint = (e: ChangeEvent<HTMLInputElement>) =>
     setVocabularyHint(e.target.value);
 
-  const onClose = async () => {
-    await VocabularyService.remove(user, vocabulary);
-    navigate(ROUTES.HOME);
-  };
-
   const onBlur = async () => {
     const newVocabulary: IVocabulary = {
       ...vocabulary,
@@ -58,27 +51,19 @@ const _Vocabulary: FC = () => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      <Toast onClose={onClose}>
-        <Toast.Header>
-          <strong className="me-auto">
-            <Form.Control
-              type={"input"}
-              value={vocabularyName}
-              onChange={onChangeName}
-              onBlur={onBlur}
-            />
-          </strong>
-          <small>{createdDate.toLocaleDateString()}</small>
-        </Toast.Header>
-        <Toast.Body>
-          <Form.Control
-            type={"input"}
-            value={vocabularyHint}
-            onChange={onChangeHint}
-            onBlur={onBlur}
-          />
-        </Toast.Body>
-      </Toast>
+      <Form.Control
+        type={"input"}
+        value={vocabularyName}
+        onChange={onChangeName}
+        onBlur={onBlur}
+      />
+
+      <Form.Control
+        type={"input"}
+        value={vocabularyHint}
+        onChange={onChangeHint}
+        onBlur={onBlur}
+      />
 
       <Translations vocabularyId={vocabulary.id} />
     </div>

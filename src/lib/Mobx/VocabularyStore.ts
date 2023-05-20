@@ -24,6 +24,7 @@ export default class VocabularyStore {
       add: action,
       getById: action,
       update: action,
+      remove: action,
     });
   }
 
@@ -47,5 +48,9 @@ export default class VocabularyStore {
     this.vocabularies = this.vocabularies.map((v) =>
       v.id === vocabulary.id ? vocabulary : v
     );
+  }
+
+  remove(vocabulary: IVocabulary) {
+    this.vocabularies = this.vocabularies.filter((v) => v.id !== vocabulary.id);
   }
 }

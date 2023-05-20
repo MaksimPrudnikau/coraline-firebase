@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { useStores } from "../../lib/Mobx";
 import { firebaseAuth } from "../Databases/firestore.ts";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "./const.ts";
 import * as VocabularyService from "../../lib/Services/Vocabulary.ts";
 import { IVocabulary } from "../../lib/Mobx/VocabularyStore.ts";
@@ -19,6 +19,7 @@ const _Layout: FC<IProps> = ({ children }) => {
   const vocabularies = vocabularyStore.vocabularies;
   const [showMenu, setShowMenu] = useState(false);
   const navigator = useNavigate();
+  const location = useLocation();
 
   const openMenu = () => setShowMenu(true);
   const closeMenu = () => setShowMenu(false);
@@ -32,6 +33,13 @@ const _Layout: FC<IProps> = ({ children }) => {
   };
   const onClose = async (vocabulary: IVocabulary) => {
     await VocabularyService.remove(user, vocabulary);
+    if (vocabularies.length === 1) {
+      vocabularyStore.remove(vocabulary);
+    }
+
+    if (location.pathname.includes(ROUTES.VOCABULARY)) {
+      navigator(ROUTES.HOME);
+    }
   };
 
   return (

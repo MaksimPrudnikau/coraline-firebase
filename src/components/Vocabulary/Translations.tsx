@@ -9,6 +9,7 @@ import { onValue, push, ref, remove, update } from "firebase/database";
 import { ITranslation } from "../../lib/Mobx/VocabularyStore.ts";
 import { get } from "lodash";
 import { TranslationsStore } from "../../lib/Mobx/TranslationsStore.ts";
+import { Table } from "react-bootstrap";
 
 interface IProps {
   vocabularyId: string;
@@ -50,7 +51,7 @@ const _Translations: FC<IProps> = ({ vocabularyId }) => {
   };
 
   return (
-    <table>
+    <Table striped={true} bordered={true} hover={true} size={"sm"}>
       <thead>
         <tr>
           <td>№</td>
@@ -73,7 +74,7 @@ const _Translations: FC<IProps> = ({ vocabularyId }) => {
         })}
         <Translation position={translations.length + 1} onBlur={add} />
       </tbody>
-    </table>
+    </Table>
   );
 };
 
