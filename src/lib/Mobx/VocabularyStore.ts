@@ -1,9 +1,11 @@
 import { action, makeObservable, observable } from "mobx";
+import { cloneDeep } from "lodash";
 
 export interface IVocabulary {
   id: string;
   name: string;
   created: Date;
+  hint: string;
 }
 
 export interface ITranslation {
@@ -21,7 +23,7 @@ export default class VocabularyStore {
       from: action,
       add: action,
       getById: action,
-      updateName: action,
+      update: action,
     });
   }
 
@@ -35,16 +37,15 @@ export default class VocabularyStore {
   }
 
   getById(id: string) {
-    return this.vocabularies.find((vocabulary) => vocabulary.id === id);
+    const vocabulary = this.vocabularies.find(
+      (vocabulary) => vocabulary.id === id
+    );
+    return cloneDeep(vocabulary);
   }
 
-  updateName(vocabularyId: string, name: string) {
-    this.vocabularies = this.vocabularies.map((vocabulary) => {
-      if (vocabulary.id !== vocabularyId) {
-        return vocabulary;
-      }
-
-      return { ...vocabulary, name };
-    });
+  update(vocabulary: IVocabulary) {
+    this.vocabularies = this.vocabularies.map((v) =>
+      v.id === vocabulary.id ? vocabulary : v
+    );
   }
 }

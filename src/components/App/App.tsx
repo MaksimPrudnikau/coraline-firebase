@@ -6,13 +6,16 @@ import "../../App.css";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { firebase, firebaseAuth } from "../Databases/firestore.ts";
-import { useStores } from "../../Mobx";
+import { useStores } from "../../lib/Mobx";
 import { Login } from "../Login/Login.tsx";
 import { Vocabulary } from "../Vocabulary/Vocabulary.tsx";
 import { useEffect } from "react";
 import { User } from "firebase/auth";
-import VocabularyStore, { IVocabulary } from "../../Mobx/VocabularyStore.ts";
+import VocabularyStore, {
+  IVocabulary,
+} from "../../lib/Mobx/VocabularyStore.ts";
 import { onValue, ref } from "firebase/database";
+import { Layout } from "./Layout.tsx";
 
 const App = () => {
   const { userStore, vocabularyStore } = useStores();
@@ -39,13 +42,22 @@ const App = () => {
           path={ROUTES.HOME}
           element={
             <ProtectedRoute>
-              <Home />
+              <Layout>
+                <Home />
+              </Layout>
             </ProtectedRoute>
           }
         />
         <Route path={ROUTES.LOGIN} element={<Login />} />
         <Route path={ROUTES.REGISTER} element={<Register />} />
-        <Route path={`${ROUTES.VOCABULARY}/:id`} element={<Vocabulary />} />
+        <Route
+          path={`${ROUTES.VOCABULARY}/:id`}
+          element={
+            <Layout>
+              <Vocabulary />
+            </Layout>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
@@ -58,10 +70,11 @@ function getVocabularies(user: User, vocabularyStore: VocabularyStore) {
     if (snapshot.exists()) {
       const data: IVocabulary[] = Object.entries<IVocabulary>(
         snapshot.val()
-      ).map(([id, { name, created }]) => ({
+      ).map(([id, { name, created, hint }]) => ({
         id,
         name,
         created: new Date(created),
+        hint,
       }));
       vocabularyStore.from(data);
     }

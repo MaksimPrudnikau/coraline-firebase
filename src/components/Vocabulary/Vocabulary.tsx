@@ -1,15 +1,15 @@
-import { ChangeEvent, FC } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { observer } from "mobx-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useStores } from "../../Mobx";
+import { useStores } from "../../lib/Mobx";
 import { ROUTES } from "../App/const.ts";
 import { isEmpty } from "lodash";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { firebase, firebaseAuth } from "../Databases/firestore.ts";
-import { User } from "firebase/auth";
+import { firebaseAuth } from "../Databases/firestore.ts";
 import { Translations } from "./Translations.tsx";
-import { ref, update } from "firebase/database";
-import { IVocabulary } from "../../Mobx/VocabularyStore.ts";
+import { IVocabulary } from "../../lib/Mobx/VocabularyStore.ts";
+import { Form, Toast } from "react-bootstrap";
+import * as VocabularyService from "../../lib/Services/Vocabulary.ts";
 
 const _Vocabulary: FC = () => {
   const { id } = useParams();
@@ -23,6 +23,10 @@ const _Vocabulary: FC = () => {
   const { vocabularyStore } = useStores();
   const vocabularies = vocabularyStore.vocabularies;
   const vocabulary = vocabularyStore.getById(id as string);
+  const [vocabularyName, setVocabularyName] = useState(vocabulary?.name || "");
+  const [vocabularyHint, setVocabularyHint] = useState(vocabulary?.hint || "");
+
+  const createdDate = new Date(vocabulary?.created || "");
 
   if (isEmpty(vocabularies)) {
     return <div>Loading...</div>;
@@ -32,29 +36,53 @@ const _Vocabulary: FC = () => {
     return <div>Nothing found</div>;
   }
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) =>
-    vocabularyStore.updateName(vocabulary.id, e.target.value);
+  const onChangeName = (e: ChangeEvent<HTMLInputElement>) =>
+    setVocabularyName(e.target.value);
+  const onChangeHint = (e: ChangeEvent<HTMLInputElement>) =>
+    setVocabularyHint(e.target.value);
 
-  const onBlur = () => updateName(user as User, vocabulary);
+  const onClose = async () => {
+    await VocabularyService.remove(user, vocabulary);
+    navigate(ROUTES.HOME);
+  };
+
+  const onBlur = async () => {
+    const newVocabulary: IVocabulary = {
+      ...vocabulary,
+      name: vocabularyName,
+      hint: vocabularyHint,
+    };
+    vocabularyStore.update(newVocabulary);
+    await VocabularyService.update(user, newVocabulary);
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      <input
-        type={"text"}
-        value={vocabulary.name}
-        onChange={onChange}
-        onBlurCapture={onBlur}
-      />
+      <Toast onClose={onClose}>
+        <Toast.Header>
+          <strong className="me-auto">
+            <Form.Control
+              type={"input"}
+              value={vocabularyName}
+              onChange={onChangeName}
+              onBlur={onBlur}
+            />
+          </strong>
+          <small>{createdDate.toLocaleDateString()}</small>
+        </Toast.Header>
+        <Toast.Body>
+          <Form.Control
+            type={"input"}
+            value={vocabularyHint}
+            onChange={onChangeHint}
+            onBlur={onBlur}
+          />
+        </Toast.Body>
+      </Toast>
+
       <Translations vocabularyId={vocabulary.id} />
     </div>
   );
 };
-
-async function updateName(user: User, vocabulary: IVocabulary) {
-  const collection = ref(firebase, `vocabularies/${user.uid}/${vocabulary.id}`);
-  await update(collection, {
-    name: vocabulary.name,
-  });
-}
 
 export const Vocabulary = observer(_Vocabulary);

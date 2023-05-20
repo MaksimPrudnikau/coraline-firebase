@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { ITranslation } from "../../Mobx/VocabularyStore.ts";
+import { ITranslation } from "../../lib/Mobx/VocabularyStore.ts";
 import { TranslationInput } from "./TranslationInput.tsx";
 import { isEmpty } from "lodash";
 

@@ -1,14 +1,14 @@
 import { FC, useEffect } from "react";
-import { useStores } from "../../Mobx";
+import { useStores } from "../../lib/Mobx";
 import { observer } from "mobx-react";
 import { Translation } from "./Translation.tsx";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { firebase, firebaseAuth } from "../Databases/firestore.ts";
 import { User } from "firebase/auth";
 import { onValue, push, ref, remove, update } from "firebase/database";
-import { ITranslation } from "../../Mobx/VocabularyStore.ts";
+import { ITranslation } from "../../lib/Mobx/VocabularyStore.ts";
 import { get } from "lodash";
-import { TranslationsStore } from "../../Mobx/TranslationsStore.ts";
+import { TranslationsStore } from "../../lib/Mobx/TranslationsStore.ts";
 
 interface IProps {
   vocabularyId: string;
