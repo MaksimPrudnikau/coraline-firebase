@@ -31,7 +31,6 @@ const _Vocabulary: FC = () => {
   if (!vocabulary) {
     return <div>Nothing found</div>;
   }
-  vocabularyStore.getTranslations(user as User, vocabulary);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) =>
     vocabularyStore.updateName(vocabulary.id, e.target.value);

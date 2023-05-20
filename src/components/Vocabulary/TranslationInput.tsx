@@ -2,7 +2,7 @@ import { Dispatch, FC, Fragment, SetStateAction } from "react";
 
 interface IProps {
   value: string | undefined;
-  setter: Dispatch<SetStateAction<string | undefined>>;
+  setter: Dispatch<SetStateAction<string | "">>;
   onBlur: () => Promise<void>;
 }
 
@@ -13,7 +13,7 @@ export const TranslationInput: FC<IProps> = ({ value, setter, onBlur }) => {
         type={"text"}
         value={value}
         onChange={(e) => setter(e.target.value)}
-        onBlurCapture={onBlur}
+        onBlur={onBlur}
       />
     </Fragment>
   );

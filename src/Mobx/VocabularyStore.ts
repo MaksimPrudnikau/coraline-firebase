@@ -1,7 +1,4 @@
 import { action, makeObservable, observable } from "mobx";
-import { onValue, ref } from "firebase/database";
-import { firebase } from "../components/Databases/firestore.ts";
-import { User } from "firebase/auth";
 
 export interface IVocabulary {
   id: string;
@@ -10,14 +7,13 @@ export interface IVocabulary {
 }
 
 export interface ITranslation {
-  id: string;
+  id?: string;
   english: string;
   japanese: string;
 }
 
 export default class VocabularyStore {
   vocabularies: IVocabulary[] = [];
-  translations: ITranslation[] = [];
 
   constructor() {
     makeObservable(this, {
@@ -40,20 +36,6 @@ export default class VocabularyStore {
 
   getById(id: string) {
     return this.vocabularies.find((vocabulary) => vocabulary.id === id);
-  }
-
-  getTranslations(user: User, vocabulary: IVocabulary) {
-    this.translations = [];
-    const collection = ref(
-      firebase,
-      `translations/${user.uid}/${vocabulary.id}`
-    );
-
-    return onValue(collection, (snapshot) => {
-      if (!snapshot.exists()) return;
-
-      this.translations = [...snapshot.val()];
-    });
   }
 
   updateName(vocabularyId: string, name: string) {
