@@ -4,25 +4,34 @@ import { TranslationInput } from "./TranslationInput.tsx";
 import { isEmpty } from "lodash";
 
 interface IProps {
+  isRow?: boolean;
   position: number;
   translation?: ITranslation;
-  onBlur: (
-    english: string | undefined,
-    japanese: string | undefined
-  ) => Promise<void>;
-  refresh?: boolean;
+  onBlur: (translation: ITranslation) => Promise<void>;
+  onRemove?: (translation: ITranslation) => Promise<void>;
 }
 const _Translation: FC<IProps> = (props) => {
-  const { position, translation, refresh } = props;
+  const { isRow, position, translation, onRemove } = props;
   const [english, setEnglish] = useState(translation?.english || "");
   const [japanese, setJapanese] = useState(translation?.japanese || "");
 
   const onBlur = async () => {
-    await props.onBlur(english, japanese);
-    if (refresh && !isEmpty(english) && !isEmpty(japanese)) {
+    const newTranslation: ITranslation = {
+      ...translation,
+      english: english || "",
+      japanese: japanese || "",
+    };
+    await props.onBlur(newTranslation);
+    if (!isRow && !isEmpty(english) && !isEmpty(japanese)) {
       setEnglish("");
       setJapanese("");
     }
+  };
+
+  const onClick = () => {
+    if (!onRemove || !translation) return;
+
+    return onRemove(translation);
   };
 
   return (
@@ -38,6 +47,11 @@ const _Translation: FC<IProps> = (props) => {
           onBlur={onBlur}
         />
       </td>
+      {isRow ? (
+        <td>
+          <button onClick={onClick}>Remove</button>
+        </td>
+      ) : null}
     </tr>
   );
 };

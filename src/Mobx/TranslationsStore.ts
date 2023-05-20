@@ -9,6 +9,8 @@ export class TranslationsStore {
       translations: observable,
       set: action,
       add: action,
+      update: action,
+      remove: action,
     });
   }
 
@@ -23,6 +25,12 @@ export class TranslationsStore {
   update(translation: ITranslation) {
     this.translations = this.translations.map((t) =>
       t.id === translation.id ? translation : t
+    );
+  }
+
+  remove(translation: ITranslation) {
+    this.translations = this.translations.filter(
+      (t) => t.id !== translation.id
     );
   }
 }

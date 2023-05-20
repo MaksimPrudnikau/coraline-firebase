@@ -5,7 +5,7 @@ import { Translation } from "./Translation.tsx";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { firebase, firebaseAuth } from "../Databases/firestore.ts";
 import { User } from "firebase/auth";
-import { onValue, push, ref, set } from "firebase/database";
+import { onValue, push, ref, remove, update } from "firebase/database";
 import { ITranslation } from "../../Mobx/VocabularyStore.ts";
 import { get } from "lodash";
 import { TranslationsStore } from "../../Mobx/TranslationsStore.ts";
@@ -20,40 +20,33 @@ const _Translations: FC<IProps> = ({ vocabularyId }) => {
   const translations = translationsStore.translations;
   useEffect(
     () => getTranslations(user as User, vocabularyId, translationsStore),
-    [vocabularyId]
+    [translationsStore, user, vocabularyId]
   );
 
-  const update = async (
-    english: string | undefined,
-    japanese: string | undefined
-  ) => {
-    const newTranslation: ITranslation = {
-      english: english || "",
-      japanese: japanese || "",
-    };
-
+  const update = async (translation: ITranslation) => {
     await updateTranslation(
       user as User,
       vocabularyId,
-      newTranslation,
+      translation,
       translationsStore
     );
   };
 
-  const add = async (
-    english: string | undefined,
-    japanese: string | undefined
-  ) => {
+  const add = async (translation: ITranslation) => {
+    const { english, japanese } = translation;
+
     if (get(english, "length", 0) === 0 || get(japanese, "length", 0) === 0) {
       return;
     }
 
-    const newTranslation: ITranslation = {
-      english: english || "",
-      japanese: japanese || "",
-    };
+    await addTranslation(user as User, vocabularyId, translation);
+  };
 
-    await addTranslation(user as User, vocabularyId, newTranslation);
+  const remove = async (translation: ITranslation) => {
+    await removeTranslation(user as User, vocabularyId, translation);
+    if (translations.length === 1) {
+      translationsStore.remove(translation);
+    }
   };
 
   return (
@@ -72,15 +65,13 @@ const _Translations: FC<IProps> = ({ vocabularyId }) => {
               key={translation.id}
               position={index + 1}
               translation={translation}
+              isRow={true}
               onBlur={update}
+              onRemove={remove}
             />
           );
         })}
-        <Translation
-          position={translations.length + 1}
-          onBlur={add}
-          refresh={true}
-        />
+        <Translation position={translations.length + 1} onBlur={add} />
       </tbody>
     </table>
   );
@@ -114,8 +105,18 @@ async function updateTranslation(
   translation: ITranslation,
   translationsStore: TranslationsStore
 ) {
-  const collection = ref(firebase, `translations/${user.uid}/${vocabularyId}`);
-  await set(collection, translation);
+  const { id, english, japanese } = translation;
+
+  const collection = ref(
+    firebase,
+    `translations/${user.uid}/${vocabularyId}/${id}`
+  );
+
+  await update(collection, {
+    english,
+    japanese,
+  });
+
   translationsStore.update(translation);
 }
 
@@ -126,6 +127,18 @@ async function addTranslation(
 ) {
   const collection = ref(firebase, `translations/${user.uid}/${vocabularyId}`);
   await push(collection, translation);
+}
+
+async function removeTranslation(
+  user: User,
+  vocabularyId: string,
+  translation: ITranslation
+) {
+  const path = ref(
+    firebase,
+    `translations/${user.uid}/${vocabularyId}/${translation.id}`
+  );
+  await remove(path);
 }
 
 export const Translations = observer(_Translations);

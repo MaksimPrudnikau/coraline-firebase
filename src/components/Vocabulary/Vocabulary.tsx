@@ -8,7 +8,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { firebase, firebaseAuth } from "../Databases/firestore.ts";
 import { User } from "firebase/auth";
 import { Translations } from "./Translations.tsx";
-import { ref, set } from "firebase/database";
+import { ref, update } from "firebase/database";
 import { IVocabulary } from "../../Mobx/VocabularyStore.ts";
 
 const _Vocabulary: FC = () => {
@@ -52,7 +52,7 @@ const _Vocabulary: FC = () => {
 
 async function updateName(user: User, vocabulary: IVocabulary) {
   const collection = ref(firebase, `vocabularies/${user.uid}/${vocabulary.id}`);
-  await set(collection, {
+  await update(collection, {
     name: vocabulary.name,
   });
 }
