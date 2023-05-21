@@ -20,7 +20,7 @@ const _Vocabulary: FC = () => {
   useEffect(() => {
     const v = vocabularyStore.getById(id as string);
     setVocabulary(v);
-  }, [id]);
+  }, [id, vocabularyStore]);
 
   if (isEmpty(vocabularies)) {
     return <div>Loading...</div>;
