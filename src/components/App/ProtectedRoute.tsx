@@ -1,7 +1,7 @@
 import {ReactNode, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {useAuthState} from "react-firebase-hooks/auth";
-import {firebaseAuth} from "../Databases/firestore.ts";
+import {firebaseAuth} from "../../lib/Databases/firestore.ts";
 import {ROUTES} from "./const.ts";
 
 interface IProps {

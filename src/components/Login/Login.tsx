@@ -1,7 +1,7 @@
 import {FC, useState} from "react";
 import {observer} from "mobx-react";
 import {signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, AuthProvider } from 'firebase/auth';
-import {firebaseAuth} from "../Databases/firestore.ts";
+import {firebaseAuth} from "../../lib/Databases/firestore.ts";
 import {Link, useNavigate} from "react-router-dom";
 import {ROUTES} from "../App/const.ts";
 

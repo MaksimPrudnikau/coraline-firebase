@@ -5,11 +5,11 @@ import { useStores } from "../../lib/Mobx";
 import { ROUTES } from "../App/const.ts";
 import { isEmpty } from "lodash";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { firebaseAuth } from "../Databases/firestore.ts";
-import { Translations } from "./Translations.tsx";
+import { firebaseAuth } from "../../lib/Databases/firestore.ts";
+import { Translations } from "../Translations/Translations.tsx";
 import { IVocabulary } from "../../lib/Mobx/VocabularyStore.ts";
-import { Form } from "react-bootstrap";
 import * as VocabularyService from "../../lib/Services/Vocabulary.ts";
+import { EnterInput } from "../Shared/EnterInput.tsx";
 
 const _Vocabulary: FC = () => {
   const { id } = useParams();
@@ -51,14 +51,13 @@ const _Vocabulary: FC = () => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      <Form.Control
-        type={"input"}
+      <EnterInput
         value={vocabularyName}
         onChange={onChangeName}
         onBlur={onBlur}
       />
 
-      <Form.Control
+      <EnterInput
         type={"input"}
         value={vocabularyHint}
         onChange={onChangeHint}

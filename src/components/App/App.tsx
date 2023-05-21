@@ -5,7 +5,7 @@ import { Register } from "../Register/Register.tsx";
 import "../../App.css";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { firebase, firebaseAuth } from "../Databases/firestore.ts";
+import { firebase, firebaseAuth } from "../../lib/Databases/firestore.ts";
 import { useStores } from "../../lib/Mobx";
 import { Login } from "../Login/Login.tsx";
 import { Vocabulary } from "../Vocabulary/Vocabulary.tsx";

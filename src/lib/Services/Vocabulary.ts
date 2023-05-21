@@ -5,8 +5,8 @@ import {
   remove as firebaseRemove,
   update as firebaseUpdate,
 } from "firebase/database";
-import { firebase } from "../../components/Databases/firestore.ts";
 import { IVocabulary } from "../Mobx/VocabularyStore.ts";
+import {firebase} from "../Databases/firestore.ts";
 
 export async function create(user: User | null | undefined) {
   if (!user) {

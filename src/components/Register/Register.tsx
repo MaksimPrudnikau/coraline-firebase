@@ -7,7 +7,7 @@ import {
     createUserWithEmailAndPassword, GoogleAuthProvider,
     signInWithPopup,
 } from "firebase/auth";
-import {firebaseAuth} from "../Databases/firestore.ts";
+import {firebaseAuth} from "../../lib/Databases/firestore.ts";
 
 const _Register: FC = () => {
     const [email, setEmail] = useState('');
