@@ -5,17 +5,14 @@ import { Register } from "../Register/Register.tsx";
 import "../../App.css";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { firebase, firebaseAuth } from "../../lib/Databases/firestore.ts";
+import { firebaseAuth } from "../../lib/Databases/firestore.ts";
 import { useStores } from "../../lib/Mobx";
 import { Login } from "../Login/Login.tsx";
 import { Vocabulary } from "../Vocabulary/Vocabulary.tsx";
 import { useEffect } from "react";
 import { User } from "firebase/auth";
-import VocabularyStore, {
-  IVocabulary,
-} from "../../lib/Mobx/VocabularyStore.ts";
-import { onValue, ref } from "firebase/database";
 import { Layout } from "./Layout.tsx";
+import * as VocabularyService from "../../lib/Services/Vocabulary.ts";
 
 const App = () => {
   const { userStore, vocabularyStore } = useStores();
@@ -25,7 +22,7 @@ const App = () => {
 
   useEffect(() => {
     if (loading || !user) return;
-    getVocabularies(user as User, vocabularyStore);
+    VocabularyService.get(user as User, vocabularyStore);
   }, [loading, user, vocabularyStore]);
 
   if (loading) {
@@ -62,23 +59,5 @@ const App = () => {
     </BrowserRouter>
   );
 };
-
-function getVocabularies(user: User, vocabularyStore: VocabularyStore) {
-  const collection = ref(firebase, `vocabularies/${user.uid}`);
-
-  return onValue(collection, (snapshot) => {
-    if (snapshot.exists()) {
-      const data: IVocabulary[] = Object.entries<IVocabulary>(
-        snapshot.val()
-      ).map(([id, { name, created, hint }]) => ({
-        id,
-        name,
-        created: new Date(created),
-        hint,
-      }));
-      vocabularyStore.from(data);
-    }
-  });
-}
 
 export default App;

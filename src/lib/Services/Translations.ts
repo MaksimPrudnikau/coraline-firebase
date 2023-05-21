@@ -1,6 +1,7 @@
 import { User } from "firebase/auth";
 import { TranslationsStore } from "../Mobx/TranslationsStore.ts";
 import {
+  child,
   onValue,
   push,
   ref,
@@ -10,6 +11,10 @@ import {
 import { firebase } from "../Databases/firestore.ts";
 import { ITranslation } from "../Mobx/VocabularyStore.ts";
 
+function getCollection(user: User, vocabulary: string) {
+  return ref(firebase, `${user.uid}/translations/${vocabulary}`);
+}
+
 export async function create(
   user: User | null | undefined,
   vocabularyId: string,
@@ -18,7 +23,7 @@ export async function create(
   if (!user) {
     return;
   }
-  const collection = ref(firebase, `translations/${user.uid}/${vocabularyId}`);
+  const collection = getCollection(user, vocabularyId);
   await push(collection, translation);
 }
 
@@ -30,7 +35,8 @@ export function get(
   if (!user) {
     return;
   }
-  const collection = ref(firebase, `translations/${user.uid}/${vocabularyId}`);
+
+  const collection = getCollection(user, vocabularyId);
 
   onValue(collection, (snapshot) => {
     if (!snapshot.exists()) {
@@ -52,17 +58,15 @@ export async function update(
   vocabularyId: string,
   translation: ITranslation
 ) {
-  if (!user) {
+  if (!user || !translation.id) {
     return;
   }
   const { id, english, japanese } = translation;
 
-  const collection = ref(
-    firebase,
-    `translations/${user.uid}/${vocabularyId}/${id}`
-  );
+  const collection = getCollection(user, vocabularyId);
+  const translationRef = child(collection, id);
 
-  await firebaseUpdate(collection, {
+  await firebaseUpdate(translationRef, {
     english,
     japanese,
   });
@@ -73,13 +77,11 @@ export async function remove(
   vocabularyId: string,
   translation: ITranslation
 ) {
-  if (!user) {
+  if (!user || !translation.id) {
     return;
   }
 
-  const path = ref(
-    firebase,
-    `translations/${user.uid}/${vocabularyId}/${translation.id}`
-  );
-  await firebaseRemove(path);
+  const collection = getCollection(user, vocabularyId);
+  const translationRef = child(collection, translation.id);
+  await firebaseRemove(translationRef);
 }
