@@ -8,8 +8,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "./const.ts";
 import * as VocabularyService from "../../lib/Services/Vocabulary.ts";
 import { IVocabulary } from "../../lib/Mobx/VocabularyStore.ts";
-import { FiEdit } from "react-icons/fi";
+import { FiEdit, FiLogOut, FiMenu } from "react-icons/fi";
 import { layoutContext } from "./context.ts";
+import { signOut } from "firebase/auth";
 
 interface IProps {
   children: ReactNode;
@@ -68,12 +69,21 @@ const _Layout: FC<IProps> = ({ children }) => {
       <Container>
         <Navbar bg="light" expand="lg">
           <Container>
-            <Navbar.Brand href="/">Coraline</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
-            <Navbar.Text>
-              <Button onClick={openMenu}>Hello</Button>
-            </Navbar.Text>
+            <Button
+              variant="outline-secondary"
+              onClick={openMenu}
+              style={{ display: "flex" }}
+            >
+              <FiMenu size={20} />
+            </Button>
+            <Navbar.Brand href={ROUTES.HOME}>Coraline</Navbar.Brand>
+            <Button
+              variant="outline-secondary"
+              onClick={() => signOut(firebaseAuth)}
+              style={{ display: "flex" }}
+            >
+              <FiLogOut size={20} />
+            </Button>
           </Container>
         </Navbar>
         {children}
