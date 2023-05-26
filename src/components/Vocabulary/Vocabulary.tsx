@@ -20,14 +20,10 @@ const _Vocabulary: FC = () => {
   useEffect(() => {
     const v = vocabularyStore.getById(id as string);
     setVocabulary(v);
-  }, [id, vocabularyStore]);
+  }, [id, vocabularyStore, vocabularies]);
 
-  if (isEmpty(vocabularies)) {
+  if (isEmpty(vocabulary)) {
     return <div>Loading...</div>;
-  }
-
-  if (!vocabulary) {
-    return <div>Nothing found</div>;
   }
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) =>
@@ -53,8 +49,8 @@ const _Vocabulary: FC = () => {
     });
 
   const onBlur = async () => {
-    vocabularyStore.update(vocabulary);
-    await VocabularyService.update(user, vocabulary);
+    vocabularyStore.update(vocabulary as IVocabulary);
+    await VocabularyService.update(user, vocabulary as IVocabulary);
   };
 
   return (

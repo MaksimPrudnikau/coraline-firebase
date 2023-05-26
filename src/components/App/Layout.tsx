@@ -5,7 +5,7 @@ import { useStores } from "../../lib/Mobx";
 import { firebaseAuth } from "../../lib/Databases/firestore.ts";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ROUTES } from "./const.ts";
+import DYNAMIC_ROUTES, { ROUTES } from "./const.ts";
 import * as VocabularyService from "../../lib/Services/Vocabulary.ts";
 import { IVocabulary } from "../../lib/Mobx/VocabularyStore.ts";
 import { FiEdit, FiLogOut, FiMenu } from "react-icons/fi";
@@ -33,7 +33,7 @@ const _Layout: FC<IProps> = ({ children }) => {
       return;
     }
 
-    navigator(`${ROUTES.VOCABULARY}/${vocabularyId}`);
+    navigator(DYNAMIC_ROUTES.vocabulary(vocabularyId));
   };
   const onClose = async (vocabulary: IVocabulary) => {
     await VocabularyService.remove(user, vocabulary);
@@ -48,7 +48,7 @@ const _Layout: FC<IProps> = ({ children }) => {
 
   const onEdit = (vocabulary: IVocabulary) => {
     closeMenu();
-    navigator(`${ROUTES.VOCABULARY}/${vocabulary.id}`);
+    navigator(DYNAMIC_ROUTES.vocabulary(vocabulary.id));
   };
 
   const isSelected = (v: IVocabulary) => selectedVocabulary?.id === v.id;

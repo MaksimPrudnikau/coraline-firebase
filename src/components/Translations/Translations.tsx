@@ -47,7 +47,13 @@ const _Translations: FC<IProps> = ({ vocabularyId }) => {
   };
 
   return (
-    <Table striped={true} bordered={true} hover={true} size={"sm"}>
+    <Table
+      striped={true}
+      bordered={true}
+      hover={true}
+      size={"sm"}
+      style={{ textAlign: "center" }}
+    >
       <thead>
         <tr>
           <td>№</td>

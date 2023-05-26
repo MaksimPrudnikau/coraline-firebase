@@ -29,6 +29,10 @@ const App = () => {
     return <>Loading...</>;
   }
 
+  // if (true) {
+  //   return <Loading />;
+  // }
+
   userStore.setUser(user);
 
   return (

@@ -38,9 +38,9 @@ export default class VocabularyStore {
   }
 
   getById(id: string) {
-    const vocabulary = this.vocabularies.find(
-      (vocabulary) => vocabulary.id === id
-    );
+    const vocabulary = this.vocabularies.find((vocabulary) => {
+      return vocabulary.id === id;
+    });
     return cloneDeep(vocabulary);
   }
 

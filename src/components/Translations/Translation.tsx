@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { ITranslation } from "../../lib/Mobx/VocabularyStore.ts";
 import { TranslationInput } from "./TranslationInput.tsx";
 import { isEmpty } from "lodash";
+import { RiDeleteBin6Line } from "react-icons/all";
 
 interface IProps {
   isRow?: boolean;
@@ -49,7 +50,12 @@ const _Translation: FC<IProps> = (props) => {
       </td>
       {isRow ? (
         <td>
-          <button onClick={onClick}>Remove</button>
+          <RiDeleteBin6Line
+            color={"red"}
+            size={17}
+            style={{ cursor: "pointer" }}
+            onClick={onClick}
+          />
         </td>
       ) : null}
     </tr>

@@ -38,7 +38,7 @@ const _Home: FC = () => {
         variant="outline-primary"
         onClick={isEmpty(vocabulary) ? openMenu : onClick}
       >
-        {isEmpty(vocabulary) ? "Select Vocabulary" : "Translation"};
+        {isEmpty(vocabulary) ? "Select Vocabulary" : "Translation"}
       </Button>
     </div>
   );
