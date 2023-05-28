@@ -17,6 +17,7 @@
     "@types/lodash": "^4.14.194",
     "bootstrap": "^5.2.3",
     "firebase": "^9.21.0",
+    "formik": "^2.4.0",
     "lodash": "^4.17.21",
     "mobx": "^6.9.0",
     "mobx-react": "^7.6.0",
@@ -26,7 +27,8 @@
     "react-dom": "^18.2.0",
     "react-firebase-hooks": "^5.1.1",
     "react-icons": "^4.8.0",
-    "react-router-dom": "^6.11.1"
+    "react-router-dom": "^6.11.1",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

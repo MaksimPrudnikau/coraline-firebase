@@ -18,6 +18,7 @@ const _Translations: FC<IProps> = ({ vocabularyId }) => {
   const [user] = useAuthState(firebaseAuth);
   const { translationsStore } = useStores();
   const translations = translationsStore.translations;
+
   useEffect(
     () => TranslationsService.get(user, vocabularyId, translationsStore),
     [translationsStore, user, vocabularyId]

@@ -1,18 +1,18 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Home } from "../Home/Home.tsx";
 import { ROUTES } from "./const.ts";
-import { Register } from "../Register/Register.tsx";
 import "../../App.css";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { firebaseAuth } from "../../lib/Databases/firestore.ts";
 import { useStores } from "../../lib/Mobx";
-import { Login } from "../Login/Login.tsx";
 import { Vocabulary } from "../Vocabulary/Vocabulary.tsx";
 import { useEffect } from "react";
 import { User } from "firebase/auth";
 import { Layout } from "./Layout.tsx";
 import * as VocabularyService from "../../lib/Services/Vocabulary.ts";
+import { Register } from "../Auth/Register/Register.tsx";
+import { Login } from "../Auth/Login/Login.tsx";
 
 const App = () => {
   const { userStore, vocabularyStore } = useStores();
