@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { firebaseAuth } from "../../lib/Databases/firestore.ts";
 import { useStores } from "../../lib/Mobx";
@@ -9,6 +9,7 @@ import { layoutContext } from "../App/context.ts";
 import { ITranslation } from "../../lib/Mobx/VocabularyStore.ts";
 import { Card } from "./Card.tsx";
 import { Button } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
 
 const _Home: FC = () => {
   const [user] = useAuthState(firebaseAuth);
@@ -16,13 +17,7 @@ const _Home: FC = () => {
   const { vocabulary, openMenu } = useContext(layoutContext);
   const translations = translationsStore.translations;
   const [randomTranslation, setRandomTranslation] = useState<ITranslation>();
-
-  const onClick = () => {
-    if (!vocabulary) return;
-    const random = sample(translations);
-    setRandomTranslation(random);
-  };
-
+  const [reverseTranslation, setReverseTranslation] = useState(false);
   useEffect(() => {
     if (!vocabulary?.id) {
       return;
@@ -31,9 +26,31 @@ const _Home: FC = () => {
     TranslationsService.get(user, vocabulary.id, translationsStore);
   }, [user, vocabulary, translationsStore]);
 
+  const onClick = () => {
+    if (!vocabulary) return;
+    let random = sample(translations);
+    while (random?.id === randomTranslation?.id) {
+      random = sample(translations);
+    }
+
+    setRandomTranslation(random);
+  };
+
+  const onSelect = (e: ChangeEvent<HTMLSelectElement>) =>
+    setReverseTranslation(e.target.value === "Japanese");
+
   return (
     <div>
-      {randomTranslation ? <Card translation={randomTranslation} /> : null}
+      {randomTranslation ? (
+        <Card
+          translation={randomTranslation}
+          reverseTranslation={reverseTranslation}
+        />
+      ) : null}
+      <Form.Select onChange={onSelect}>
+        <option>English</option>
+        <option>Japanese</option>
+      </Form.Select>
       <Button
         variant="outline-primary"
         onClick={isEmpty(vocabulary) ? openMenu : onClick}
