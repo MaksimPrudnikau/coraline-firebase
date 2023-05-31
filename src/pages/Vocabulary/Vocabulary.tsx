@@ -5,10 +5,10 @@ import { useStores } from "../../lib/Mobx";
 import { cloneDeep, isEmpty } from "lodash";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { firebaseAuth } from "../../lib/Databases/firestore.ts";
-import { Translations } from "../Translations/Translations.tsx";
+import { Translations } from "../../components/Translations/Translations.tsx";
 import { IVocabulary } from "../../lib/Mobx/VocabularyStore.ts";
 import * as VocabularyService from "../../lib/Services/Vocabulary.ts";
-import { EnterInput } from "../Shared/EnterInput.tsx";
+import { EnterInput } from "../../components/Shared/EnterInput.tsx";
 
 const _Vocabulary: FC = () => {
   const { id } = useParams();
@@ -20,7 +20,7 @@ const _Vocabulary: FC = () => {
   useEffect(() => {
     const v = vocabularyStore.getById(id as string);
     setVocabulary(v);
-  }, [id, vocabularyStore, vocabularies]);
+  }, [user, id, vocabularyStore, vocabularies]);
 
   if (isEmpty(vocabulary)) {
     return <div>Loading...</div>;

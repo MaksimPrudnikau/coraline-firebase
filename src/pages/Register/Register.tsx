@@ -2,17 +2,17 @@ import { Form, Formik } from "formik";
 import { FC } from "react";
 import { observer } from "mobx-react";
 import { Link, useNavigate } from "react-router-dom";
-import { ROUTES } from "../../App/const.ts";
+import { ROUTES } from "../../components/App/const.ts";
 import {
   AuthProvider,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { firebaseAuth } from "../../../lib/Databases/firestore.ts";
+import { firebaseAuth } from "../../lib/Databases/firestore.ts";
 import { defaultValidationProps, validationSchema } from "./types.ts";
-import { FormikField } from "../FormikField.tsx";
-import { IRegisterProps } from "../types.ts";
+import { FormikField } from "../../components/Shared/Auth/FormikField.tsx";
+import { IRegisterProps } from "../../components/Shared/Auth/types.ts";
 
 const _Register: FC = () => {
   const googleProvider = new GoogleAuthProvider();

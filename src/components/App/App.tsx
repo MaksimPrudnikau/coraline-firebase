@@ -1,23 +1,25 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Home } from "../Home/Home.tsx";
+import { Home } from "../../pages/Home/Home.tsx";
 import { ROUTES } from "./const.ts";
 import "../../App.css";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { firebaseAuth } from "../../lib/Databases/firestore.ts";
 import { useStores } from "../../lib/Mobx";
-import { Vocabulary } from "../Vocabulary/Vocabulary.tsx";
+import { Vocabulary } from "../../pages/Vocabulary/Vocabulary.tsx";
 import { useEffect } from "react";
 import { User } from "firebase/auth";
 import { Layout } from "./Layout.tsx";
 import * as VocabularyService from "../../lib/Services/Vocabulary.ts";
-import { Register } from "../Auth/Register/Register.tsx";
-import { Login } from "../Auth/Login/Login.tsx";
+import { Register } from "../../pages/Register/Register.tsx";
+import { Login } from "../../pages/Login/Login.tsx";
 
 const App = () => {
   const { userStore, vocabularyStore } = useStores();
   const [user, loading] = useAuthState(firebaseAuth, {
-    onUserChanged: async (user) => userStore.setUser(user),
+    onUserChanged: async (user) => {
+      userStore.setUser(user);
+    },
   });
 
   useEffect(() => {

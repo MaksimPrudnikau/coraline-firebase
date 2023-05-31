@@ -1,6 +1,6 @@
 import * as Yup from "yup";
-import * as Validations from "../validations.ts";
-import { ILoginProps } from "../types.ts";
+import * as Validations from "../../components/Shared/Auth/validations.ts";
+import { ILoginProps } from "../../components/Shared/Auth/types.ts";
 
 export const defaultValidationProps: ILoginProps = {
   email: "",

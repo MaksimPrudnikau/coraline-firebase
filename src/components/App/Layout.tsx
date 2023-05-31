@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { Button, Container, Navbar, Offcanvas, Toast } from "react-bootstrap";
 import { observer } from "mobx-react";
 import { useStores } from "../../lib/Mobx";
@@ -17,13 +17,19 @@ interface IProps {
 }
 
 const _Layout: FC<IProps> = ({ children }) => {
-  const [user] = useAuthState(firebaseAuth);
+  const [user, loading] = useAuthState(firebaseAuth);
   const { vocabularyStore } = useStores();
   const vocabularies = vocabularyStore.vocabularies;
   const [showMenu, setShowMenu] = useState(false);
   const navigator = useNavigate();
   const location = useLocation();
   const [selectedVocabulary, selectVocabulary] = useState<IVocabulary>();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigator(ROUTES.LOGIN);
+    }
+  });
 
   const openMenu = () => setShowMenu(true);
   const closeMenu = () => setShowMenu(false);
