@@ -72,6 +72,7 @@ const _Translations: FC<IProps> = ({ vocabularyId }) => {
               isRow={true}
               onBlur={update}
               onRemove={remove}
+              validating={true}
             />
           );
         })}
