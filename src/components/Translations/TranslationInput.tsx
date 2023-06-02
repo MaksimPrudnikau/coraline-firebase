@@ -27,8 +27,7 @@ export const TranslationInput: FC<IProps> = (props) => {
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTouched(true);
-    const trim = e.target.value.trim();
-    setter(trim);
+    setter(e.target.value);
   };
 
   const onBlur = async () => {

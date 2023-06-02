@@ -17,10 +17,12 @@ const _Translation: FC<IProps> = (props) => {
   const [japanese, setJapanese] = useState(translation?.japanese || "");
 
   const onBlur = async () => {
+    setEnglish((prev) => prev.trim());
+    setJapanese((prev) => prev.trim());
     const newTranslation: ITranslation = {
       ...translation,
-      english: english || "",
-      japanese: japanese || "",
+      english: english.trim() || "",
+      japanese: japanese.trim() || "",
     };
     await props.onBlur(newTranslation);
     if (!isRow && !isEmpty(english) && !isEmpty(japanese)) {
