@@ -18,6 +18,7 @@ const _Home: FC = () => {
   const translations = translationsStore.translations;
   const [randomTranslation, setRandomTranslation] = useState<ITranslation>();
   const [reverseTranslation, setReverseTranslation] = useState(false);
+
   useEffect(() => {
     if (!vocabulary?.id) {
       return;
@@ -47,10 +48,12 @@ const _Home: FC = () => {
           reverseTranslation={reverseTranslation}
         />
       ) : null}
-      <Form.Select onChange={onSelect}>
-        <option>English</option>
-        <option>Japanese</option>
-      </Form.Select>
+      {!isEmpty(vocabulary) ? (
+        <Form.Select onChange={onSelect}>
+          <option>English</option>
+          <option>Japanese</option>
+        </Form.Select>
+      ) : null}
       <Button
         variant="outline-primary"
         onClick={isEmpty(vocabulary) ? openMenu : onClick}
