@@ -13,18 +13,17 @@ interface IProps {
   value: string | undefined;
   setter: Dispatch<SetStateAction<string | "">>;
   onBlur: () => Promise<void>;
-  validating?: boolean;
 }
 
 export const TranslationInput: FC<IProps> = (props) => {
-  const { value, setter, validating } = props;
+  const { value, setter } = props;
   const [touched, setTouched] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const validate = validating ? validateValue(value) : null;
+    const validate = validateValue(value);
     setError(validate);
-  }, [value, validating]);
+  }, [value]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTouched(true);
@@ -40,9 +39,7 @@ export const TranslationInput: FC<IProps> = (props) => {
   return (
     <Fragment>
       <EnterInput value={value} onChange={onChange} onBlur={onBlur} />
-      {validating && touched && error && (
-        <label style={{ color: "red" }}>{error}</label>
-      )}
+      {touched && error && <label style={{ color: "red" }}>{error}</label>}
     </Fragment>
   );
 };

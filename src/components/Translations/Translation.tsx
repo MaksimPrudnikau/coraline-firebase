@@ -10,10 +10,9 @@ interface IProps {
   translation?: ITranslation;
   onBlur: (translation: ITranslation) => Promise<void>;
   onRemove?: (translation: ITranslation) => Promise<void>;
-  validating?: boolean;
 }
 const _Translation: FC<IProps> = (props) => {
-  const { isRow, position, translation, onRemove, validating } = props;
+  const { isRow, position, translation, onRemove } = props;
   const [english, setEnglish] = useState(translation?.english || "");
   const [japanese, setJapanese] = useState(translation?.japanese || "");
 
@@ -42,19 +41,13 @@ const _Translation: FC<IProps> = (props) => {
     <tr>
       <td>{position}</td>
       <td>
-        <TranslationInput
-          value={english}
-          setter={setEnglish}
-          onBlur={onBlur}
-          validating={validating}
-        />
+        <TranslationInput value={english} setter={setEnglish} onBlur={onBlur} />
       </td>
       <td>
         <TranslationInput
           value={japanese}
           setter={setJapanese}
           onBlur={onBlur}
-          validating={validating}
         />
       </td>
       {isRow ? (
