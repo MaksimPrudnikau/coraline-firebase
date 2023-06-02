@@ -56,8 +56,6 @@ const _Register: FC = () => {
     >
       {(props) => {
         const { errors, touched, isValid, dirty } = props;
-        console.log("dirty", dirty);
-        console.log("isValid", isValid);
         return (
           <Form>
             <FormikField type={"email"} touched={touched} errors={errors} />
