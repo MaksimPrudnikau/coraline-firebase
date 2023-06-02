@@ -1,22 +1,32 @@
 import { Form, Formik } from "formik";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { observer } from "mobx-react";
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../components/App/const.ts";
 import {
   AuthProvider,
   createUserWithEmailAndPassword,
+  getRedirectResult,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
 } from "firebase/auth";
 import { firebaseAuth } from "../../lib/Databases/firestore.ts";
 import { defaultValidationProps, validationSchema } from "./types.ts";
 import { FormikField } from "../../components/Shared/Auth/FormikField.tsx";
 import { IRegisterProps } from "../../components/Shared/Auth/types.ts";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const _Register: FC = () => {
+  const [user, loading] = useAuthState(firebaseAuth);
+
   const googleProvider = new GoogleAuthProvider();
   const navigation = useNavigate();
+
+  useEffect(() => {
+    if (!loading && user) {
+      navigation(ROUTES.HOME);
+    }
+  }, [user, loading, navigation]);
 
   const onRegister = async (values: IRegisterProps) => {
     const credentials = await createUserWithEmailAndPassword(
@@ -30,8 +40,9 @@ const _Register: FC = () => {
   };
 
   const onRegisterProvider = async (provider: AuthProvider) => {
-    const credentials = await signInWithPopup(firebaseAuth, provider);
-    if (credentials.user) {
+    await signInWithRedirect(firebaseAuth, provider);
+    const credentials = await getRedirectResult(firebaseAuth);
+    if (credentials?.user) {
       navigation(ROUTES.HOME);
     }
   };
@@ -58,10 +69,10 @@ const _Register: FC = () => {
               errors={errors}
             />
 
-            <button
-              onClick={() => onRegisterProvider(googleProvider)}
-              disabled={!dirty || !isValid}
-            >
+            <button type={"submit"} disabled={!dirty || !isValid}>
+              Sign up
+            </button>
+            <button onClick={() => onRegisterProvider(googleProvider)}>
               Google
             </button>
             <label>Already have an account?</label>
