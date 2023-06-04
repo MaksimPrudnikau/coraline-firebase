@@ -72,7 +72,7 @@ const _Layout: FC<IProps> = ({ children }) => {
         openMenu,
       }}
     >
-      <Container>
+      <div>
         <Navbar bg="light" expand="lg">
           <Container>
             <Button
@@ -125,7 +125,7 @@ const _Layout: FC<IProps> = ({ children }) => {
           </Offcanvas.Body>
           <Button onClick={onCreate}>Create new</Button>
         </Offcanvas>
-      </Container>
+      </div>
     </layoutContext.Provider>
   );
 };
