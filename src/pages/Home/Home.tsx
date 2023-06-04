@@ -39,6 +39,13 @@ const _Home: FC = () => {
     setRandomTranslation(random);
   };
 
+  const onChangeTranslationType = (revert: boolean) => {
+    setCardHiddenAnswer(true);
+    setReverseTranslation(revert);
+  };
+
+  console.log(reverseTranslation);
+
   return (
     <div style={{ textAlign: "-webkit-center" }}>
       {randomTranslation ? (
@@ -61,10 +68,10 @@ const _Home: FC = () => {
           }
           onClick={isEmpty(vocabulary) ? openMenu : onClick}
         >
-          <MenuItem onSelect={() => setReverseTranslation(false)}>
+          <MenuItem onClick={() => onChangeTranslationType(false)}>
             English
           </MenuItem>
-          <MenuItem onClick={() => setReverseTranslation(true)}>
+          <MenuItem onClick={() => onChangeTranslationType(true)}>
             Japanese
           </MenuItem>
         </SplitButton>
