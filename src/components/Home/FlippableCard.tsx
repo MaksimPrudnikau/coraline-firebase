@@ -8,15 +8,16 @@ interface IProps {
   translation: ITranslation;
   reverseTranslation: boolean;
   hidden: boolean;
+  setHidden: () => void;
 }
 
 export const FlippableCard: FC<IProps> = ({
   translation,
   reverseTranslation,
   hidden,
+  setHidden,
 }) => {
   const [showAnswer, setShowAnswer] = useState(false);
-  const [dirty, setDirty] = useState(false);
 
   let definition = translation.english;
   let meaning = translation.japanese;
@@ -27,25 +28,18 @@ export const FlippableCard: FC<IProps> = ({
   }
 
   useEffect(() => {
-    setDirty(false);
     setShowAnswer(false);
   }, [translation, reverseTranslation]);
 
-  const onClick = () => setShowAnswer((prev) => !prev);
+  const onClick = () => {
+    setHidden();
+    setShowAnswer((prev) => !prev);
+  };
   return (
     <div className="flippable-card-container" onClick={onClick}>
-      <CSSTransition
-        in={!showAnswer}
-        timeout={600}
-        classNames="flip"
-        onExited={() => setDirty(true)}
-        onEnter={() => setDirty(false)}
-      >
+      <CSSTransition in={!showAnswer} timeout={600} classNames="flip">
         <Fragment>
-          <Card
-            definition={definition}
-            meaning={hidden && !dirty ? "" : meaning}
-          />
+          <Card definition={definition} meaning={hidden ? "" : meaning} />
         </Fragment>
       </CSSTransition>
     </div>

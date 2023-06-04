@@ -46,6 +46,7 @@ const _Home: FC = () => {
           translation={randomTranslation}
           reverseTranslation={reverseTranslation}
           hidden={cardHiddenAnswer}
+          setHidden={() => setCardHiddenAnswer(false)}
         />
       ) : null}
       {translations.length === 0 ? (
