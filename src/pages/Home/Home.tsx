@@ -10,6 +10,7 @@ import { ITranslation } from "../../lib/Mobx/VocabularyStore.ts";
 import { SplitButton } from "react-bootstrap";
 import { FlippableCard } from "../../components/Home/FlippableCard.tsx";
 import { MenuItem } from "@mui/material";
+import "./styles.css";
 
 const _Home: FC = () => {
   const [user] = useAuthState(firebaseAuth);
@@ -47,7 +48,7 @@ const _Home: FC = () => {
   console.log(reverseTranslation);
 
   return (
-    <div style={{ textAlign: "-webkit-center" }}>
+    <div className={"home-container"}>
       {randomTranslation ? (
         <FlippableCard
           translation={randomTranslation}
