@@ -45,8 +45,6 @@ const _Home: FC = () => {
     setReverseTranslation(revert);
   };
 
-  console.log(reverseTranslation);
-
   return (
     <div className={"home-container"}>
       {randomTranslation ? (
